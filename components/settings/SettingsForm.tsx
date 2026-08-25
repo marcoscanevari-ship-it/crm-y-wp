@@ -17,7 +17,7 @@ export function SettingsForm({
   return (
     <form action={formAction} className="bg-white rounded-2xl shadow-sm p-6 space-y-5">
       <div>
-        <label className="block text-sm font-medium mb-2">System prompt de Berta</label>
+        <label className="block text-sm font-medium mb-2">System prompt de Zokky</label>
         <textarea
           name="system_prompt"
           defaultValue={systemPrompt}

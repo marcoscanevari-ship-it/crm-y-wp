@@ -1,8 +1,8 @@
-# Berta CRM — Puesta en marcha
+# ZOKKIA CRM — Puesta en marcha
 
-CRM de WhatsApp con agente IA (Berta), calificación automática de leads y follow-up automático.
-Stack: Next.js 16 (App Router) + Supabase + WhatsApp Business API (Meta) + OpenRouter (DeepSeek) + Vercel.
-(Resend está soportado en el código pero no se usa en este proyecto — ver sección 4.)
+CRM de WhatsApp con agente IA (Zokky), calificación automática de leads y follow-up automático.
+Stack: Next.js 16 (App Router) + Supabase + WhatsApp Business API (Meta) + OpenRouter (DeepSeek) + Resend + Vercel.
+(Microsoft Graph / Outlook 365 es opcional, para que Zokky proponga horarios — ver sección 5.)
 
 ## 0. Requisitos locales
 
@@ -28,7 +28,7 @@ Stack: Next.js 16 (App Router) + Supabase + WhatsApp Business API (Meta) + OpenR
 
 1. https://supabase.com → nuevo proyecto.
 2. Guardar **Project URL** (`SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_URL`), **anon key** (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) y **service_role key** (`SUPABASE_SERVICE_ROLE_KEY`).
-3. **SQL Editor** → correr el contenido completo de `supabase/schema.sql` (crea tablas, índices, RLS y el system prompt inicial de Berta).
+3. **SQL Editor** → correr el contenido completo de `supabase/schema.sql` (crea tablas, índices, RLS y el system prompt inicial de Zokky).
 4. **Authentication → Providers**: habilitar **Email** (magic link).
 5. **Authentication → URL Configuration**:
    - Site URL: `https://tu-app.vercel.app`
@@ -43,19 +43,32 @@ Stack: Next.js 16 (App Router) + Supabase + WhatsApp Business API (Meta) + OpenR
 2. **Keys** → crear API key → `OPENROUTER_API_KEY`.
 3. El sistema usa `deepseek/deepseek-chat-v3-0324` (`lib/ai.ts`, `lib/qualify.ts`).
 
-## 4. Resend (emails) — OPCIONAL, no se usa en este proyecto
+## 4. Resend (emails) — activo
 
-Este proyecto no usa Resend: dejá `RESEND_API_KEY` y `NOTIFY_EMAIL` vacíos. `lib/email.ts` detecta que no
-hay API key y no hace nada (no rompe el webhook ni el cron `/api/cron/notify`, solo no manda las alertas
-de leads hot ni el digest diario). Si en algún momento querés reactivarlo, con solo cargar esas dos
-variables ya queda funcionando.
+`lib/email.ts` usa Resend para las alertas de leads hot y el digest diario. Si `RESEND_API_KEY` no está
+cargada, las funciones no hacen nada (no rompen el webhook ni el cron `/api/cron/notify`), así que podés
+deployar sin esto y activarlo después.
 
-1. https://resend.com → crear cuenta, verificar tu dominio de envío.
+1. https://resend.com → crear cuenta, verificar tu dominio de envío (o usar el sandbox `onboarding@resend.dev` para pruebas).
 2. **API Keys** → crear key → `RESEND_API_KEY`.
 3. Definí `NOTIFY_EMAIL` con el/los emails que reciben alertas de leads hot y el digest diario (separados por coma).
 4. Ajustá el remitente `from` en `lib/email.ts` una vez que tengas el dominio verificado en Resend.
 
-## 5. Vercel — Deploy
+## 5. Microsoft Graph (Outlook 365) — OPCIONAL, para que Zokky proponga horarios
+
+Permite que Zokky consulte el calendario de Outlook 365 configurado y proponga horarios reales de reunión
+(lunes a viernes, 9:00 a 17:00 hora Argentina) directamente en la conversación. Si las variables no están
+cargadas, `lib/calendar.ts` no hace nada y Zokky sigue funcionando sin esta info.
+
+1. https://portal.azure.com → **Azure Active Directory** → **Registros de aplicaciones** → **Nuevo registro**.
+2. Copiá el **Id. de aplicación (cliente)** → `MS_CLIENT_ID` y el **Id. de directorio (inquilino)** → `MS_TENANT_ID`.
+3. **Certificados y secretos** → **Nuevo secreto de cliente** → copiá el valor (una sola vez) → `MS_CLIENT_SECRET`.
+4. **Permisos de API** → **Agregar un permiso** → **Microsoft Graph** → **Permisos de la aplicación** → agregar `Calendars.Read`.
+5. **Conceder consentimiento de administrador** para ese permiso (requiere rol de administrador del tenant).
+6. `MS_CALENDAR_USER_EMAIL` = el email de Outlook 365 cuyo calendario se va a consultar (por ejemplo, el tuyo).
+7. La integración usa el flujo *client credentials* (sin login interactivo) — pensada para leer un único calendario de forma automática desde el backend.
+
+## 6. Vercel — Deploy
 
 1. Importar el repo en Vercel.
 2. Variables de entorno (Project Settings → Environment Variables):
@@ -71,28 +84,33 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 OPENROUTER_API_KEY=
 RESEND_API_KEY=
 NOTIFY_EMAIL=
+MS_TENANT_ID=
+MS_CLIENT_ID=
+MS_CLIENT_SECRET=
+MS_CALENDAR_USER_EMAIL=
 CRON_SECRET=
 ```
 
 3. `vercel.json` ya define los 4 crons (`/api/cron/notify` 21:00 UTC, `/api/cron/followup` 13/17/21 UTC). Vercel los agrega automáticamente al deployar (requiere plan con Cron Jobs habilitado).
 4. Deployar.
 
-## 6. Conectar el webhook
+## 7. Conectar el webhook
 
 Con la URL de Vercel ya deployada, volvé a Meta Developers → WhatsApp → Configuración → Webhook → completar URL + verify token → **Verificar y guardar** → suscribirse a `messages`, `message_deliveries`, `message_reads`.
 
-## 7. Checklist final
+## 8. Checklist final
 
 - [ ] App creada en Meta Developers con producto WhatsApp
 - [ ] Token permanente vía Usuario del Sistema en Business Manager
-- [ ] Proyecto Supabase creado y `supabase/schema.sql` ejecutado completo
+- [ ] Proyecto Supabase creado y `supabase/schema.sql` ejecutado completo (incluye columnas `email`/`company` de `contacts`)
 - [ ] Auth por email (magic link) configurada, dominios permitidos revisados en `lib/auth.ts`
 - [ ] Cuenta OpenRouter con API key
-- [ ] (Opcional, no usado) Cuenta Resend con dominio verificado y API key
+- [ ] Cuenta Resend con dominio verificado (o sandbox) y API key
+- [ ] (Opcional) App de Azure AD registrada con permiso `Calendars.Read` para que Zokky proponga horarios
 - [ ] Deploy en Vercel con todas las variables de entorno
 - [ ] Webhook verificado en Meta Developers, suscripto a los 3 campos
 - [ ] App de Meta en modo Activo con permiso `whatsapp_business_messaging`
-- [ ] Mensaje de prueba enviado al número de WhatsApp → Berta responde
+- [ ] Mensaje de prueba enviado al número de WhatsApp → Zokky responde
 - [ ] Login al panel probado con un email de dominio permitido
 - [ ] System prompt revisado y ajustado en `/settings`
 

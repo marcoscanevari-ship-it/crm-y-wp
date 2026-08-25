@@ -26,7 +26,7 @@ export async function sendHotLeadAlert(params: {
   if (to.length === 0 || !resend) return;
 
   await resend.emails.send({
-    from: "Berta CRM <onboarding@resend.dev>",
+    from: "ZOKKIA CRM <onboarding@resend.dev>",
     to,
     subject: `🔥 Lead HOT: ${params.contactName ?? params.phone}`,
     html: `
@@ -55,7 +55,7 @@ export async function sendDailyDigest(params: {
   };
 
   await resend.emails.send({
-    from: "Berta CRM <onboarding@resend.dev>",
+    from: "ZOKKIA CRM <onboarding@resend.dev>",
     to,
     subject: `Resumen diario de leads — ${new Date().toLocaleDateString("es-AR")}`,
     html: `

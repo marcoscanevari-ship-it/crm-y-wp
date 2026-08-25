@@ -23,3 +23,16 @@ export function inferCountry(phone: string): string {
   const match = sorted.find(([prefix]) => digits.startsWith(prefix));
   return match ? match[1] : "Otro";
 }
+
+/**
+ * Adapta un número a lo que espera el endpoint de envío de la API de WhatsApp.
+ * Bug conocido de Meta con celulares argentinos: el webhook entrega el wa_id
+ * con el "9" (549...), pero para enviar hay que sacarlo (54...).
+ */
+export function toWhatsAppSendFormat(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.startsWith("549")) {
+    return "54" + digits.slice(3);
+  }
+  return digits;
+}

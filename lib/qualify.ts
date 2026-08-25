@@ -1,7 +1,7 @@
 import type { ChatMessage } from "./ai";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "deepseek/deepseek-chat-v3-0324";
+const MODEL = "openai/gpt-5-nano";
 
 export interface LeadQualification {
   score: "hot" | "warm" | "cold";
@@ -18,7 +18,7 @@ Respondé ÚNICAMENTE con un JSON válido, sin texto adicional, con este formato
 {"score": "hot" | "warm" | "cold", "reason": "explicación breve en español", "topic": "tema principal de la conversación en 2-3 palabras"}`;
 
 /**
- * Clasifica una conversación en hot/warm/cold usando DeepSeek vía OpenRouter.
+ * Clasifica una conversación en hot/warm/cold usando GPT-5 Nano vía OpenRouter.
  */
 export async function classifyLead(history: ChatMessage[]): Promise<LeadQualification> {
   const apiKey = process.env.OPENROUTER_API_KEY;
@@ -27,7 +27,7 @@ export async function classifyLead(history: ChatMessage[]): Promise<LeadQualific
   }
 
   const transcript = history
-    .map((m) => `${m.role === "user" ? "Usuario" : "Berta"}: ${m.content}`)
+    .map((m) => `${m.role === "user" ? "Usuario" : "Zokky"}: ${m.content}`)
     .join("\n");
 
   const res = await fetch(OPENROUTER_URL, {
@@ -38,7 +38,7 @@ export async function classifyLead(history: ChatMessage[]): Promise<LeadQualific
     },
     body: JSON.stringify({
       model: MODEL,
-      temperature: 0.2,
+      reasoning: { effort: "low" },
       messages: [
         { role: "system", content: QUALIFY_SYSTEM_PROMPT },
         { role: "user", content: transcript },

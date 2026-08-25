@@ -56,7 +56,7 @@ export function TestChat() {
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
         {messages.length === 0 && (
           <p className="text-sm text-gray-400 text-center mt-10">
-            Escribí un mensaje para probar cómo responde Berta.
+            Escribí un mensaje para probar cómo responde Zokky.
           </p>
         )}
         {messages.map((m, i) => (
@@ -75,7 +75,7 @@ export function TestChat() {
         {isPending && (
           <div className="flex justify-end">
             <div className="bg-indigo-100 text-indigo-400 rounded-2xl rounded-br-sm px-4 py-2 text-sm">
-              Berta está escribiendo...
+              Zokky está escribiendo...
             </div>
           </div>
         )}

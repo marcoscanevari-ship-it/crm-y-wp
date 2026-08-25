@@ -8,6 +8,7 @@ import {
 import { generateReply, type ChatMessage } from "@/lib/ai";
 import { classifyLead } from "@/lib/qualify";
 import { sendHotLeadAlert } from "@/lib/email";
+import { getAvailabilityContext } from "@/lib/calendar";
 
 const QUALIFY_AFTER_USER_MESSAGES = 3;
 
@@ -85,7 +86,9 @@ export async function POST(request: NextRequest) {
             .eq("key", "system_prompt")
             .single();
 
-          const systemPrompt = settingRow?.value ?? "Sos Berta, asistente de la agencia.";
+          const basePrompt = settingRow?.value ?? "Sos Zokky, asistente virtual de Zokkia.";
+          const availability = await getAvailabilityContext();
+          const systemPrompt = availability ? basePrompt + availability : basePrompt;
 
           const reply = await generateReply(chatHistory, systemPrompt);
           const wamid = await sendWhatsAppText(contact.phone, reply);

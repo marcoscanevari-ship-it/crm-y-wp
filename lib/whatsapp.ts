@@ -1,3 +1,5 @@
+import { toWhatsAppSendFormat } from "@/lib/phone";
+
 const GRAPH_API_VERSION = "v21.0";
 
 function apiUrl(path: string) {
@@ -24,7 +26,7 @@ export async function sendWhatsAppText(to: string, body: string): Promise<string
     },
     body: JSON.stringify({
       messaging_product: "whatsapp",
-      to,
+      to: toWhatsAppSendFormat(to),
       type: "text",
       text: { body, preview_url: false },
     }),

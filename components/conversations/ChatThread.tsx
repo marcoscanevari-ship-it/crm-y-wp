@@ -64,7 +64,7 @@ export function ChatThread({
 
   async function handleBlock() {
     const next = !blocked;
-    if (next && !confirm("¿Bloquear este contacto? Berta dejará de responderle.")) return;
+    if (next && !confirm("¿Bloquear este contacto? Zokky dejará de responderle.")) return;
     setBlocked(next);
     await fetch(`/api/conversations/${contactId}/block`, {
       method: "PATCH",

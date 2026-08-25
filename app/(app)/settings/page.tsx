@@ -18,7 +18,7 @@ export default async function SettingsPage() {
     <>
       <Topbar
         title="Configuración"
-        subtitle="Editá las reglas y el tono de Berta."
+        subtitle="Editá las reglas y el tono de Zokky."
         userEmail={userData.user?.email}
       />
       <SettingsForm

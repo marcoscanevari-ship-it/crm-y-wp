@@ -117,7 +117,7 @@ export default async function ConversationsPage({
                 </div>
                 <p className="text-xs text-gray-400 truncate">
                   {r.lastMessage
-                    ? `${r.lastMessage.role === "assistant" ? "Berta: " : ""}${r.lastMessage.content}`
+                    ? `${r.lastMessage.role === "assistant" ? "Zokky: " : ""}${r.lastMessage.content}`
                     : "Sin mensajes"}
                 </p>
               </div>

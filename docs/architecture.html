@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Arquitectura - ZOKKIA CRM (WhatsApp + IA)</title>
+<style>
+  :root {
+    --border: #7d8998;
+    --group-bg: #f7f9fb;
+    --vercel-border: #000000;
+    --supabase-border: #3ECF8E;
+    --meta-border: #0866FF;
+    --ai-border: #6467F2;
+    --arrow: #545b64;
+    --text: #16191f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px;
+    background: #ffffff;
+    font-family: "Amazon Ember", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 4px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #545b64;
+    margin: 0 0 28px;
+  }
+  .canvas {
+    position: relative;
+    width: 1360px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  svg { overflow: visible; }
+
+  .region {
+    fill: var(--group-bg);
+    stroke-width: 1.5;
+    rx: 10;
+  }
+  .region-label {
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--text);
+  }
+  .region-icon { }
+
+  .box {
+    fill: #ffffff;
+    stroke: var(--border);
+    stroke-width: 1.2;
+    rx: 8;
+  }
+  .box-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    fill: var(--text);
+  }
+  .box-sub {
+    font-size: 10.5px;
+    fill: #545b64;
+  }
+  .actor-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    fill: var(--text);
+    text-anchor: middle;
+  }
+  .actor-sub {
+    font-size: 10.5px;
+    fill: #545b64;
+    text-anchor: middle;
+  }
+  .edge {
+    fill: none;
+    stroke: var(--arrow);
+    stroke-width: 1.6;
+  }
+  .edge-dashed {
+    fill: none;
+    stroke: var(--arrow);
+    stroke-width: 1.4;
+    stroke-dasharray: 5 4;
+  }
+  .edge-label {
+    font-size: 10px;
+    fill: #333a45;
+  }
+  .edge-label-bg {
+    fill: #ffffff;
+    opacity: 0.92;
+  }
+  .legend-text { font-size: 11px; fill: #545b64; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <h1>ZOKKIA CRM — Arquitectura del sistema (WhatsApp + IA)</h1>
+  <p class="subtitle">Next.js 16 en Vercel · Supabase (Postgres + Auth) · WhatsApp Cloud API (Meta) · OpenRouter (GPT-5 Nano) · Resend</p>
+
+  <svg width="1360" height="760" viewBox="0 0 1360 760">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--arrow)"/>
+      </marker>
+    </defs>
+
+    <!-- ================= ACTORS (left column) ================= -->
+    <!-- Contact / WhatsApp user -->
+    <g transform="translate(20,120)">
+      <rect class="box" x="0" y="0" width="150" height="90" rx="8"/>
+      <image href="https://cdn.simpleicons.org/whatsapp/25D366" x="55" y="12" width="40" height="40"/>
+      <text class="actor-label" x="75" y="68">Contacto / Lead</text>
+      <text class="actor-sub" x="75" y="82">Usuario de WhatsApp</text>
+    </g>
+
+    <!-- CRM Admin -->
+    <g transform="translate(20,420)">
+      <rect class="box" x="0" y="0" width="150" height="90" rx="8"/>
+      <text x="75" y="38" text-anchor="middle" font-size="30">🧑&#8203;💼</text>
+      <text class="actor-label" x="75" y="68">Admin / Vendedor</text>
+      <text class="actor-sub" x="75" y="82">Panel del CRM (browser)</text>
+    </g>
+
+    <!-- ================= VERCEL REGION ================= -->
+    <g transform="translate(230,40)">
+      <rect class="region" x="0" y="0" width="480" height="560" style="stroke:var(--vercel-border)"/>
+      <image href="https://cdn.simpleicons.org/vercel/000000" x="14" y="14" width="20" height="20"/>
+      <text class="region-label" x="42" y="29">Vercel (hosting Next.js 16)</text>
+
+      <!-- Next.js App Router UI -->
+      <g transform="translate(30,50)">
+        <rect class="box" x="0" y="0" width="200" height="70"/>
+        <image href="https://cdn.simpleicons.org/nextdotjs/000000" x="10" y="15" width="26" height="26"/>
+        <text class="box-title" x="46" y="30">App Router (UI)</text>
+        <text class="box-sub" x="46" y="46">/dashboard /conversations</text>
+        <text class="box-sub" x="46" y="58">/leads /settings</text>
+      </g>
+
+      <!-- Auth middleware -->
+      <g transform="translate(250,50)">
+        <rect class="box" x="0" y="0" width="200" height="70"/>
+        <image href="https://cdn.simpleicons.org/supabase/3ECF8E" x="10" y="15" width="26" height="26"/>
+        <text class="box-title" x="46" y="30">Middleware Auth</text>
+        <text class="box-sub" x="46" y="46">Magic link (Supabase)</text>
+        <text class="box-sub" x="46" y="58">dominios permitidos</text>
+      </g>
+
+      <!-- Webhook route -->
+      <g transform="translate(30,150)">
+        <rect class="box" x="0" y="0" width="200" height="80" style="stroke:var(--meta-border)"/>
+        <image href="https://cdn.simpleicons.org/meta/0866FF" x="10" y="12" width="24" height="24"/>
+        <text class="box-title" x="42" y="26">/api/webhook</text>
+        <text class="box-sub" x="10" y="46">Recibe mensajes entrantes</text>
+        <text class="box-sub" x="10" y="58">Genera respuesta con IA</text>
+        <text class="box-sub" x="10" y="70">Guarda + responde por WA</text>
+      </g>
+
+      <!-- Conversations send route -->
+      <g transform="translate(250,150)">
+        <rect class="box" x="0" y="0" width="200" height="80"/>
+        <text class="box-title" x="14" y="24">/api/conversations/[id]/send</text>
+        <text class="box-sub" x="10" y="42">Envío manual desde el CRM</text>
+        <text class="box-sub" x="10" y="54">(el vendedor le escribe</text>
+        <text class="box-sub" x="10" y="66">directo al lead)</text>
+      </g>
+
+      <!-- Cron notify -->
+      <g transform="translate(30,260)">
+        <rect class="box" x="0" y="0" width="200" height="78"/>
+        <text font-size="20" x="12" y="26">⏰</text>
+        <text class="box-title" x="42" y="24">/api/cron/notify</text>
+        <text class="box-sub" x="10" y="44">Corre 1x/día (21:00)</text>
+        <text class="box-sub" x="10" y="56">Digest de leads calientes</text>
+        <text class="box-sub" x="10" y="68">→ email por Resend</text>
+      </g>
+
+      <!-- Cron followup -->
+      <g transform="translate(250,260)">
+        <rect class="box" x="0" y="0" width="200" height="78"/>
+        <text font-size="20" x="12" y="26">⏰</text>
+        <text class="box-title" x="42" y="24">/api/cron/followup</text>
+        <text class="box-sub" x="10" y="44">Corre 3x/día (13/17/21h)</text>
+        <text class="box-sub" x="10" y="56">Genera follow-up con IA</text>
+        <text class="box-sub" x="10" y="68">→ reenvía por WhatsApp</text>
+      </g>
+
+      <!-- lib layer -->
+      <g transform="translate(30,368)">
+        <rect class="box" x="0" y="0" width="420" height="66" style="stroke-dasharray:4 3"/>
+        <text class="box-title" x="14" y="20">Capa de lógica (lib/)</text>
+        <text class="box-sub" x="14" y="38">ai.ts (chat) · qualify.ts (scoring de leads) · whatsapp.ts (envío,</text>
+        <text class="box-sub" x="14" y="52">normaliza número AR) · phone.ts · email.ts</text>
+      </g>
+
+      <!-- vercel.json crons config -->
+      <g transform="translate(30,454)">
+        <rect class="box" x="0" y="0" width="420" height="46"/>
+        <text class="box-title" x="14" y="18">vercel.json</text>
+        <text class="box-sub" x="14" y="34">Programación de los 4 cron jobs (Vercel Cron)</text>
+      </g>
+
+      <text class="legend-text" x="30" y="536">Deploy: GitHub → Vercel CLI (build Next.js + funciones serverless)</text>
+    </g>
+
+    <!-- ================= SUPABASE REGION ================= -->
+    <g transform="translate(750,40)">
+      <rect class="region" x="0" y="0" width="280" height="330" style="stroke:var(--supabase-border)"/>
+      <image href="https://cdn.simpleicons.org/supabase/3ECF8E" x="14" y="14" width="20" height="20"/>
+      <text class="region-label" x="42" y="29">Supabase</text>
+
+      <g transform="translate(20,50)">
+        <rect class="box" x="0" y="0" width="240" height="60"/>
+        <image href="https://cdn.simpleicons.org/postgresql/4169E1" x="10" y="14" width="26" height="26"/>
+        <text class="box-title" x="46" y="28">Postgres + RLS</text>
+        <text class="box-sub" x="46" y="44">contacts, messages, leads,</text>
+      </g>
+
+      <g transform="translate(20,120)">
+        <rect class="box" x="0" y="0" width="240" height="36"/>
+        <text class="box-sub" x="12" y="22">conversations, settings, users</text>
+      </g>
+
+      <g transform="translate(20,170)">
+        <rect class="box" x="0" y="0" width="240" height="60"/>
+        <text font-size="22" x="12" y="30">🔐</text>
+        <text class="box-title" x="46" y="24">Supabase Auth</text>
+        <text class="box-sub" x="46" y="42">Magic link, sesión del panel</text>
+      </g>
+
+      <g transform="translate(20,244)">
+        <rect class="box" x="0" y="0" width="240" height="60" style="stroke-dasharray:4 3"/>
+        <text font-size="20" x="12" y="26">🛰️</text>
+        <text class="box-title" x="44" y="24">REST API</text>
+        <text class="box-sub" x="12" y="42">service_role (server) /</text>
+        <text class="box-sub" x="12" y="54">anon+RLS (cliente)</text>
+      </g>
+    </g>
+
+    <!-- ================= EXTERNAL APIs REGION ================= -->
+    <g transform="translate(1060,40)">
+      <rect class="region" x="0" y="0" width="280" height="560" style="stroke:#c7cdd6"/>
+      <text class="region-label" x="14" y="20">APIs externas</text>
+
+      <g transform="translate(20,40)">
+        <rect class="box" x="0" y="0" width="240" height="80" style="stroke:var(--meta-border)"/>
+        <image href="https://cdn.simpleicons.org/meta/0866FF" x="10" y="14" width="26" height="26"/>
+        <text class="box-title" x="46" y="28">WhatsApp Cloud API</text>
+        <text class="box-sub" x="10" y="48">Meta Graph API v21</text>
+        <text class="box-sub" x="10" y="60">Webhook + Send messages</text>
+        <text class="box-sub" x="10" y="72">System User token</text>
+      </g>
+
+      <g transform="translate(20,140)">
+        <rect class="box" x="0" y="0" width="240" height="90" style="stroke:var(--ai-border)"/>
+        <image href="https://cdn.simpleicons.org/openrouter/000000" x="10" y="14" width="26" height="26"/>
+        <text class="box-title" x="46" y="28">OpenRouter</text>
+        <text class="box-sub" x="10" y="48">Modelo: openai/gpt-5-nano</text>
+        <text class="box-sub" x="10" y="60">Genera respuestas de Zok</text>
+        <text class="box-sub" x="10" y="72">Califica leads (score IA)</text>
+        <text class="box-sub" x="10" y="84">Genera follow-ups</text>
+      </g>
+
+      <g transform="translate(20,250)">
+        <rect class="box" x="0" y="0" width="240" height="70"/>
+        <image href="https://cdn.simpleicons.org/resend/000000" x="10" y="14" width="26" height="26"/>
+        <text class="box-title" x="46" y="28">Resend</text>
+        <text class="box-sub" x="10" y="46">Email de leads calientes</text>
+        <text class="box-sub" x="10" y="58">(opcional, digest diario)</text>
+      </g>
+    </g>
+
+    <!-- ================= ARROWS ================= -->
+    <!-- Contact -> WhatsApp Cloud API (mensaje entrante) -->
+    <path class="edge" d="M170,150 C 500,150 900,80 1080,60" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="430" y="88" width="150" height="16"/>
+    <text class="edge-label" x="436" y="100">1. Envía mensaje por WhatsApp</text>
+
+    <!-- WhatsApp Cloud API -> webhook (POST) -->
+    <path class="edge" d="M1080,90 C 700,140 500,170 460,185" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="640" y="140" width="180" height="16"/>
+    <text class="edge-label" x="646" y="152">2. POST webhook (mensaje)</text>
+
+    <!-- webhook -> OpenRouter -->
+    <path class="edge" d="M460,195 C 850,150 1000,150 1080,190" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="700" y="158" width="150" height="16"/>
+    <text class="edge-label" x="706" y="170">3. Pide respuesta IA</text>
+
+    <!-- webhook -> Supabase (guardar) -->
+    <path class="edge" d="M460,210 C 620,240 700,240 770,235" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="590" y="222" width="150" height="16"/>
+    <text class="edge-label" x="596" y="234">4. Guarda mensaje/lead</text>
+
+    <!-- webhook -> WhatsApp Cloud API (respuesta saliente) -->
+    <path class="edge" d="M400,150 C 700,60 950,40 1080,55" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="620" y="60" width="170" height="16"/>
+    <text class="edge-label" x="626" y="72">5. Envía respuesta de Zok</text>
+
+    <!-- WhatsApp Cloud API -> Contact -->
+    <path class="edge" d="M1080,68 C 700,110 400,140 172,140" marker-end="url(#arrow)"/>
+
+    <!-- crons -> OpenRouter / WhatsApp / Resend -->
+    <path class="edge-dashed" d="M460,300 C 850,270 1000,240 1080,200" marker-end="url(#arrow)"/>
+    <path class="edge-dashed" d="M460,320 C 850,310 1000,290 1080,270" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="620" y="288" width="200" height="16"/>
+    <text class="edge-label" x="626" y="300">6. Cron: followup / notify (IA, WA, Resend)</text>
+
+    <!-- crons -> Supabase -->
+    <path class="edge-dashed" d="M460,310 C 620,310 700,300 770,270" marker-end="url(#arrow)"/>
+
+    <!-- Admin -> Next.js UI -->
+    <path class="edge" d="M170,455 C 200,300 220,150 230,110" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="150" y="280" width="130" height="16"/>
+    <text class="edge-label" x="156" y="292">7. Login (magic link)</text>
+
+    <!-- Next.js UI -> Supabase Auth -->
+    <path class="edge" d="M480,85 C 620,120 700,150 770,180" marker-end="url(#arrow)"/>
+
+    <!-- Next.js UI -> Supabase REST (leer conversaciones/leads) -->
+    <path class="edge" d="M480,100 C 620,220 700,290 770,300" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="540" y="260" width="180" height="16"/>
+    <text class="edge-label" x="546" y="272">8. Lee/actualiza CRM (RLS)</text>
+
+    <!-- Admin -> conversations/send -->
+    <path class="edge" d="M170,470 C 220,400 260,320 250,235" marker-end="url(#arrow)"/>
+    <rect class="edge-label-bg" x="140" y="380" width="180" height="16"/>
+    <text class="edge-label" x="146" y="392">9. Responde manualmente</text>
+
+  </svg>
+
+  <div style="margin-top:20px;font-size:11px;color:#545b64;">
+    <strong>Flujo resumen:</strong>
+    Contacto escribe por WhatsApp → Meta reenvía el mensaje al webhook (Vercel) → el webhook guarda todo en Supabase,
+    le pide una respuesta al modelo IA (OpenRouter · gpt-5-nano) y la envía de vuelta por WhatsApp →
+    si detecta un lead calificado, corre <em>qualify.ts</em> y (opcional) dispara un email por Resend.
+    Los crons de Vercel corren en horarios fijos para seguimiento de leads fríos y el resumen diario.
+    El admin entra al panel con magic link (Supabase Auth) y ve/gestiona todo con RLS.
+  </div>
+</div>
+</body>
+</html>

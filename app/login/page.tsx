@@ -28,9 +28,9 @@ function LoginForm() {
       <div className="w-full max-w-sm rounded-3xl bg-white shadow-xl shadow-indigo-900/10 p-8">
         <div className="flex items-center gap-2 mb-6">
           <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold">
-            B
+            Z
           </div>
-          <span className="font-semibold text-lg">Berta CRM</span>
+          <span className="font-semibold text-lg">ZOKKIA CRM</span>
         </div>
 
         <h1 className="text-xl font-semibold mb-1">Ingresá a tu panel</h1>

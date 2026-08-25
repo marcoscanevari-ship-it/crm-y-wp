@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     supabase.from("settings").select("value").eq("key", "system_prompt").single(),
   ]);
 
-  const systemPrompt = systemPromptRow?.value ?? "Sos Berta, asistente de la agencia.";
+  const systemPrompt = systemPromptRow?.value ?? "Sos Zokky, asistente virtual de Zokkia.";
 
   type MessageRow = NonNullable<typeof messages>[number];
   const lastMessageByContact = new Map<string, MessageRow>();

@@ -1,12 +1,12 @@
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "deepseek/deepseek-chat-v3-0324";
+const MODEL = "openai/gpt-5-nano";
 
 export interface ChatMessage {
   role: "user" | "assistant" | "system";
   content: string;
 }
 
-async function chatCompletion(messages: ChatMessage[], temperature = 0.7): Promise<string> {
+async function chatCompletion(messages: ChatMessage[]): Promise<string> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     throw new Error("Falta OPENROUTER_API_KEY en las variables de entorno");
@@ -21,7 +21,7 @@ async function chatCompletion(messages: ChatMessage[], temperature = 0.7): Promi
     body: JSON.stringify({
       model: MODEL,
       messages,
-      temperature,
+      reasoning: { effort: "low" },
     }),
   });
 
@@ -39,7 +39,7 @@ async function chatCompletion(messages: ChatMessage[], temperature = 0.7): Promi
 }
 
 /**
- * Genera la respuesta de Berta dado el historial de la conversación y el system prompt vigente.
+ * Genera la respuesta de Zokky dado el historial de la conversación y el system prompt vigente.
  */
 export async function generateReply(
   history: ChatMessage[],

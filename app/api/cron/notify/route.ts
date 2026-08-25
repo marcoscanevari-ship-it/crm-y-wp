@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
     id: l.id,
     score: l.score as "hot" | "warm" | "cold",
     reason: l.reason,
-    name: (l.contact as { name: string | null; phone: string } | null)?.name ?? null,
-    phone: (l.contact as { name: string | null; phone: string } | null)?.phone ?? "",
+    name: (l.contact as unknown as { name: string | null; phone: string } | null)?.name ?? null,
+    phone: (l.contact as unknown as { name: string | null; phone: string } | null)?.phone ?? "",
   }));
 
   await sendDailyDigest({

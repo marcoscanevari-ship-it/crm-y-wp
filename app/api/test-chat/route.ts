@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { generateReply, type ChatMessage } from "@/lib/ai";
+import { getAvailabilityContext } from "@/lib/calendar";
 
 export async function POST(request: NextRequest) {
   const { history } = (await request.json()) as { history: ChatMessage[] };
@@ -16,7 +17,9 @@ export async function POST(request: NextRequest) {
     .eq("key", "system_prompt")
     .single();
 
-  const systemPrompt = settingRow?.value ?? "Sos Berta, asistente de la agencia.";
+  const basePrompt = settingRow?.value ?? "Sos Zokky, asistente virtual de Zokkia.";
+  const availability = await getAvailabilityContext();
+  const systemPrompt = availability ? basePrompt + availability : basePrompt;
 
   try {
     const reply = await generateReply(history, systemPrompt);

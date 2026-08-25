@@ -9,12 +9,14 @@ import {
   FlaskConical,
   Waves,
   LogOut,
+  Users,
 } from "lucide-react";
 import { signOutAction } from "@/app/(app)/actions";
 
 const NAV_ITEMS = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/conversations", icon: MessageSquare, label: "Conversaciones" },
+  { href: "/clientes", icon: Users, label: "Base de clientes" },
   { href: "/settings", icon: Settings, label: "Configuración" },
   { href: "/test-chat", icon: FlaskConical, label: "Test chat" },
 ];
