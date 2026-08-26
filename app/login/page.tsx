@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Suspense, useActionState, useState } from "react";
 import {
   requestMagicLink,
@@ -38,17 +39,15 @@ function LoginForm() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="bg-blobs" />
-      <div className="w-full max-w-sm rounded-3xl bg-white shadow-xl shadow-indigo-900/10 p-8">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold">
-            Z
-          </div>
+      <div className="w-full max-w-sm rounded-3xl bg-white shadow-xl shadow-primary-900/10 p-8">
+        <div className="flex flex-col items-center gap-2 mb-6">
+          <Image src="/zokkia-mark.png" alt="Zokkia" width={40} height={40} />
           <span className="font-semibold text-lg">ZOKKIA CRM</span>
         </div>
 
         {domainError && (
-          <div className="mb-4 rounded-xl bg-red-50 text-red-600 text-sm px-3 py-2">
-            Ese email no tiene acceso al panel. Solo se permite el dominio @zokkia.com.
+          <div className="mb-4 rounded-xl bg-green-50 text-green-700 text-sm px-3 py-2">
+            Solo se permite el login con dominio zokkia.com.
           </div>
         )}
 
@@ -68,19 +67,19 @@ function LoginForm() {
                 name="email"
                 required
                 placeholder="tu@zokkia.com"
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
               />
               <input
                 type="password"
                 name="password"
                 required
                 placeholder="Contraseña"
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
               />
               <button
                 type="submit"
                 disabled={passwordPending}
-                className="w-full rounded-xl bg-indigo-600 text-white text-sm font-medium py-2.5 hover:bg-indigo-700 transition disabled:opacity-60"
+                className="w-full rounded-xl bg-primary-600 text-white text-sm font-medium py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
               >
                 {passwordPending ? "Ingresando..." : "Ingresar"}
               </button>
@@ -93,7 +92,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={() => setMode("magic")}
-              className="mt-4 text-sm text-indigo-600 hover:underline"
+              className="mt-4 text-sm text-primary-600 hover:underline"
             >
               ¿Primera vez o olvidaste tu contraseña? Enviate un link mágico
             </button>
@@ -111,12 +110,12 @@ function LoginForm() {
                 name="email"
                 required
                 placeholder="tu@zokkia.com"
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
               />
               <button
                 type="submit"
                 disabled={magicPending}
-                className="w-full rounded-xl bg-indigo-600 text-white text-sm font-medium py-2.5 hover:bg-indigo-700 transition disabled:opacity-60"
+                className="w-full rounded-xl bg-primary-600 text-white text-sm font-medium py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
               >
                 {magicPending ? "Enviando..." : "Enviar link mágico"}
               </button>
@@ -131,7 +130,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={() => setMode("password")}
-              className="mt-4 text-sm text-indigo-600 hover:underline"
+              className="mt-4 text-sm text-primary-600 hover:underline"
             >
               Ya tengo contraseña
             </button>

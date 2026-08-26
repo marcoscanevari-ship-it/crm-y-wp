@@ -155,7 +155,7 @@ function ListBars({
             </div>
             <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
               <div
-                className="h-full bg-indigo-600 rounded-full"
+                className="h-full bg-primary-600 rounded-full"
                 style={{ width: `${pct}%` }}
               />
             </div>

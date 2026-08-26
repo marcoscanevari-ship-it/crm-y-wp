@@ -110,14 +110,14 @@ export function ChatThread({
             <div
               className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm ${
                 m.role === "assistant"
-                  ? "bg-indigo-600 text-white rounded-br-sm"
+                  ? "bg-primary-600 text-white rounded-br-sm"
                   : "bg-gray-100 text-gray-800 rounded-bl-sm"
               }`}
             >
               <p>{m.content}</p>
               <p
                 className={`text-[10px] mt-1 ${
-                  m.role === "assistant" ? "text-indigo-100" : "text-gray-400"
+                  m.role === "assistant" ? "text-primary-100" : "text-gray-400"
                 }`}
               >
                 {new Date(m.created_at).toLocaleTimeString("es-AR", {
@@ -141,12 +141,12 @@ export function ChatThread({
             }}
             disabled={blocked}
             placeholder={blocked ? "Contacto bloqueado" : "Escribir un mensaje manual..."}
-            className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:bg-gray-50"
+            className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 disabled:bg-gray-50"
           />
           <button
             onClick={handleSend}
             disabled={isPending || blocked || !draft.trim()}
-            className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center disabled:opacity-50"
+            className="w-10 h-10 rounded-xl bg-primary-600 text-white flex items-center justify-center disabled:opacity-50"
           >
             <Send size={16} />
           </button>

@@ -19,18 +19,18 @@ export function StatCard({
   href?: string;
 }) {
   const className = `block rounded-2xl p-5 shadow-sm transition ${
-    highlight ? "bg-indigo-600 text-white" : "bg-white text-gray-900"
+    highlight ? "bg-primary-600 text-white" : "bg-white text-gray-900"
   } ${href ? "hover:shadow-md cursor-pointer" : ""}`;
 
   const content = (
     <>
       <div className="flex items-center justify-between mb-3">
-        <span className={`text-sm ${highlight ? "text-indigo-100" : "text-gray-500"}`}>
+        <span className={`text-sm ${highlight ? "text-primary-100" : "text-gray-500"}`}>
           {label}
         </span>
         <ArrowUpRight
           size={16}
-          className={highlight ? "text-indigo-100" : "text-gray-400"}
+          className={highlight ? "text-primary-100" : "text-gray-400"}
         />
       </div>
       <div className="flex items-end gap-2">
@@ -52,7 +52,7 @@ export function StatCard({
         )}
       </div>
       {hint && (
-        <p className={`text-xs mt-1 ${highlight ? "text-indigo-100" : "text-gray-400"}`}>
+        <p className={`text-xs mt-1 ${highlight ? "text-primary-100" : "text-gray-400"}`}>
           {hint}
         </p>
       )}

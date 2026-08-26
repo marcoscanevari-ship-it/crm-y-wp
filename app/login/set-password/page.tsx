@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SetPasswordForm } from "./SetPasswordForm";
@@ -15,11 +16,9 @@ export default async function SetPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="bg-blobs" />
-      <div className="w-full max-w-sm rounded-3xl bg-white shadow-xl shadow-indigo-900/10 p-8">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold">
-            Z
-          </div>
+      <div className="w-full max-w-sm rounded-3xl bg-white shadow-xl shadow-primary-900/10 p-8">
+        <div className="flex flex-col items-center gap-2 mb-6">
+          <Image src="/zokkia-mark.png" alt="Zokkia" width={40} height={40} />
           <span className="font-semibold text-lg">ZOKKIA CRM</span>
         </div>
 

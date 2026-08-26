@@ -50,7 +50,7 @@ function AvatarSection({ profile }: { profile: Profile }) {
             className="w-16 h-16 rounded-full object-cover"
           />
         ) : (
-          <div className="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xl font-semibold">
+          <div className="w-16 h-16 rounded-full bg-primary-600 flex items-center justify-center text-white text-xl font-semibold">
             {profile.email.slice(0, 1).toUpperCase()}
           </div>
         )}
@@ -64,7 +64,7 @@ function AvatarSection({ profile }: { profile: Profile }) {
           <button
             type="submit"
             disabled={pending}
-            className="rounded-xl bg-indigo-600 text-white text-sm font-medium px-4 py-2 hover:bg-indigo-700 transition disabled:opacity-60 shrink-0"
+            className="rounded-xl bg-primary-600 text-white text-sm font-medium px-4 py-2 hover:bg-primary-700 transition disabled:opacity-60 shrink-0"
           >
             {pending ? "Subiendo..." : "Subir"}
           </button>
@@ -90,7 +90,7 @@ function PreferencesSection({ profile }: { profile: Profile }) {
         <select
           name="language"
           defaultValue={profile.language}
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
         >
           <option value="es">Español</option>
           <option value="en">English</option>
@@ -102,7 +102,7 @@ function PreferencesSection({ profile }: { profile: Profile }) {
         <select
           name="theme"
           defaultValue={profile.theme}
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
         >
           <option value="light">Claro</option>
           <option value="dark">Oscuro</option>
@@ -113,7 +113,7 @@ function PreferencesSection({ profile }: { profile: Profile }) {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-indigo-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-indigo-700 transition disabled:opacity-60"
+          className="rounded-xl bg-primary-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
         >
           {pending ? "Guardando..." : "Guardar preferencias"}
         </button>
@@ -140,7 +140,7 @@ function PersonalDataSection({ profile }: { profile: Profile }) {
           <input
             name="phone"
             defaultValue={profile.phone ?? ""}
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </div>
         <div>
@@ -148,7 +148,7 @@ function PersonalDataSection({ profile }: { profile: Profile }) {
           <input
             name="dni"
             defaultValue={profile.dni ?? ""}
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </div>
       </div>
@@ -158,7 +158,7 @@ function PersonalDataSection({ profile }: { profile: Profile }) {
         <input
           name="address"
           defaultValue={profile.address ?? ""}
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
         />
       </div>
 
@@ -170,7 +170,7 @@ function PersonalDataSection({ profile }: { profile: Profile }) {
             name="age"
             min={0}
             defaultValue={profile.age ?? ""}
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </div>
         <div>
@@ -178,7 +178,7 @@ function PersonalDataSection({ profile }: { profile: Profile }) {
           <input
             name="hobbies"
             defaultValue={profile.hobbies ?? ""}
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </div>
       </div>
@@ -187,7 +187,7 @@ function PersonalDataSection({ profile }: { profile: Profile }) {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-indigo-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-indigo-700 transition disabled:opacity-60"
+          className="rounded-xl bg-primary-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
         >
           {pending ? "Guardando..." : "Guardar datos"}
         </button>
@@ -213,7 +213,7 @@ function PasswordSection() {
         required
         minLength={8}
         placeholder="Nueva contraseña"
-        className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
       />
       <input
         type="password"
@@ -221,14 +221,14 @@ function PasswordSection() {
         required
         minLength={8}
         placeholder="Repetí la contraseña"
-        className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
       />
 
       <div className="flex items-center gap-3">
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-indigo-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-indigo-700 transition disabled:opacity-60"
+          className="rounded-xl bg-primary-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
         >
           {pending ? "Guardando..." : "Cambiar contraseña"}
         </button>

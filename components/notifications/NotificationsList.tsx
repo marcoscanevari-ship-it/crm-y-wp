@@ -42,7 +42,7 @@ export function NotificationsList({ notifications }: { notifications: Notificati
           <button
             onClick={markAllRead}
             disabled={isPending}
-            className="text-sm text-indigo-600 hover:underline disabled:opacity-60"
+            className="text-sm text-primary-600 hover:underline disabled:opacity-60"
           >
             Marcar todas como leídas
           </button>
@@ -58,10 +58,10 @@ export function NotificationsList({ notifications }: { notifications: Notificati
           const content = (
             <div
               className={`flex items-start gap-3 py-3.5 px-2 -mx-2 rounded-xl transition ${
-                n.read ? "" : "bg-indigo-50/50"
+                n.read ? "" : "bg-primary-50/50"
               } ${n.contact_id ? "hover:bg-gray-50" : ""}`}
             >
-              <div className="w-9 h-9 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
                 <Icon size={16} />
               </div>
               <div className="flex-1 min-w-0">
@@ -79,7 +79,7 @@ export function NotificationsList({ notifications }: { notifications: Notificati
                     markRead(n.id);
                   }}
                   disabled={isPending}
-                  className="text-xs text-indigo-600 hover:underline shrink-0"
+                  className="text-xs text-primary-600 hover:underline shrink-0"
                 >
                   Marcar leída
                 </button>

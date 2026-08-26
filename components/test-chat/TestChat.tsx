@@ -64,7 +64,7 @@ export function TestChat() {
             <div
               className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm ${
                 m.role === "assistant"
-                  ? "bg-indigo-600 text-white rounded-br-sm"
+                  ? "bg-primary-600 text-white rounded-br-sm"
                   : "bg-gray-100 text-gray-800 rounded-bl-sm"
               }`}
             >
@@ -74,7 +74,7 @@ export function TestChat() {
         ))}
         {isPending && (
           <div className="flex justify-end">
-            <div className="bg-indigo-100 text-indigo-400 rounded-2xl rounded-br-sm px-4 py-2 text-sm">
+            <div className="bg-primary-100 text-primary-400 rounded-2xl rounded-br-sm px-4 py-2 text-sm">
               Zokky está escribiendo...
             </div>
           </div>
@@ -91,12 +91,12 @@ export function TestChat() {
               if (e.key === "Enter") handleSend();
             }}
             placeholder="Escribí como si fueras un lead..."
-            className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
           <button
             onClick={handleSend}
             disabled={isPending || !draft.trim()}
-            className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center disabled:opacity-50"
+            className="w-10 h-10 rounded-xl bg-primary-600 text-white flex items-center justify-center disabled:opacity-50"
           >
             <Send size={16} />
           </button>

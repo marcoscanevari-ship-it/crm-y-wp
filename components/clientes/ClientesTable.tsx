@@ -65,7 +65,7 @@ function ClientRowItem({ row }: { row: ClientRow }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nombre y apellido"
-            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm outline-none focus:border-indigo-500"
+            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm outline-none focus:border-primary-500"
           />
         ) : (
           <span className="font-medium">{row.name ?? "—"}</span>
@@ -77,7 +77,7 @@ function ClientRowItem({ row }: { row: ClientRow }) {
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             placeholder="Empresa"
-            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm outline-none focus:border-indigo-500"
+            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm outline-none focus:border-primary-500"
           />
         ) : (
           row.company ?? "—"
@@ -89,7 +89,7 @@ function ClientRowItem({ row }: { row: ClientRow }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email@empresa.com"
-            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm outline-none focus:border-indigo-500"
+            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm outline-none focus:border-primary-500"
           />
         ) : (
           row.email ?? "—"
@@ -101,7 +101,7 @@ function ClientRowItem({ row }: { row: ClientRow }) {
           <button
             onClick={save}
             disabled={isPending}
-            className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center disabled:opacity-50"
+            className="w-8 h-8 rounded-lg bg-primary-600 text-white flex items-center justify-center disabled:opacity-50"
           >
             <Check size={14} />
           </button>

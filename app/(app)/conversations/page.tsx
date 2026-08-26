@@ -121,10 +121,10 @@ export default async function ConversationsPage({
             name="q"
             defaultValue={q ?? ""}
             placeholder="Buscar por nombre o teléfono..."
-            className="w-full sm:w-80 rounded-xl border border-gray-200 px-4 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full sm:w-80 rounded-xl border border-gray-200 px-4 py-2 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
           {score && (
-            <Link href="/conversations" className="text-sm text-indigo-600 hover:underline shrink-0">
+            <Link href="/conversations" className="text-sm text-primary-600 hover:underline shrink-0">
               Quitar filtro
             </Link>
           )}
@@ -142,7 +142,7 @@ export default async function ConversationsPage({
               href={`/conversations/${r.id}`}
               className="flex items-center gap-4 py-3.5 hover:bg-gray-50 -mx-2 px-2 rounded-xl transition"
             >
-              <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-medium text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center font-medium text-sm shrink-0">
                 {(r.name ?? r.phone).slice(0, 1).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
@@ -201,7 +201,7 @@ function SummaryCard({
     <Link
       href={href}
       className={`block rounded-2xl bg-white shadow-sm p-4 transition hover:shadow-md ${
-        active ? "ring-2 ring-indigo-500" : ""
+        active ? "ring-2 ring-primary-500" : ""
       }`}
     >
       <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-medium mb-2 ${tone}`}>

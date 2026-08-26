@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -7,7 +8,6 @@ import {
   MessageSquare,
   Settings,
   FlaskConical,
-  Waves,
   LogOut,
   Users,
 } from "lucide-react";
@@ -28,9 +28,7 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   return (
     <aside className="flex flex-col items-center justify-between w-[72px] shrink-0 py-5 bg-white rounded-3xl shadow-sm h-[calc(100vh-2.5rem)] sticky top-5">
       <div className="flex flex-col items-center gap-6 w-full">
-        <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
-          <Waves size={18} />
-        </div>
+        <Image src="/zokkia-mark.png" alt="Zokkia" width={40} height={40} className="rounded-xl" />
 
         <nav className="flex flex-col items-center gap-2 w-full">
           {items.map(({ href, icon: Icon, label }) => {

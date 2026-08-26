@@ -54,7 +54,7 @@ export function RolesMatrix({ profiles, currentUserId }: { profiles: ProfileRow[
                 value={p.role}
                 disabled={isPending || p.id === currentUserId}
                 onChange={(e) => changeRole(p.id, e.target.value)}
-                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-indigo-500 disabled:opacity-60"
+                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-primary-500 disabled:opacity-60"
               >
                 <option value="admin">Admin</option>
                 <option value="operador">Operador</option>

@@ -47,7 +47,7 @@ export default async function ClientesPage({
             name="q"
             defaultValue={q ?? ""}
             placeholder="Buscar por nombre, empresa, email o teléfono..."
-            className="w-full sm:w-96 rounded-xl border border-gray-200 px-4 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full sm:w-96 rounded-xl border border-gray-200 px-4 py-2 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </form>
 

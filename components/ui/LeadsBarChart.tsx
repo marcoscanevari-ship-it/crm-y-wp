@@ -22,7 +22,7 @@ export function LeadsBarChart({ data }: { data: Array<{ day: string; count: numb
           cursor={{ fill: "#f4f5fa" }}
           contentStyle={{ borderRadius: 12, border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
         />
-        <Bar dataKey="count" fill="#4f46e5" radius={[6, 6, 0, 0]} maxBarSize={28} />
+        <Bar dataKey="count" fill="#072e21" radius={[6, 6, 0, 0]} maxBarSize={28} />
       </BarChart>
     </ResponsiveContainer>
   );

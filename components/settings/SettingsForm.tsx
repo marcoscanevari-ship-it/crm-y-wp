@@ -22,7 +22,7 @@ export function SettingsForm({
           name="system_prompt"
           defaultValue={systemPrompt}
           rows={16}
-          className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-mono outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-y"
+          className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-mono outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 resize-y"
         />
       </div>
 
@@ -33,7 +33,7 @@ export function SettingsForm({
           name="calendly_link"
           defaultValue={calendlyLink}
           placeholder="https://calendly.com/tu-agencia/reunion"
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
         />
       </div>
 
@@ -41,7 +41,7 @@ export function SettingsForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-indigo-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-indigo-700 transition disabled:opacity-60"
+          className="rounded-xl bg-primary-600 text-white text-sm font-medium px-5 py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
         >
           {pending ? "Guardando..." : "Guardar cambios"}
         </button>

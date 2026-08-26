@@ -79,7 +79,7 @@ export function Topbar({
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => results.length > 0 && setOpen(true)}
               placeholder="Buscar contactos..."
-              className="pl-9 pr-4 py-2 rounded-xl bg-white shadow-sm text-sm w-56 outline-none focus:ring-2 focus:ring-indigo-100"
+              className="pl-9 pr-4 py-2 rounded-xl bg-white shadow-sm text-sm w-56 outline-none focus:ring-2 focus:ring-primary-100"
             />
             {open && results.length > 0 && (
               <div className="absolute top-full mt-2 left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-20">
@@ -93,7 +93,7 @@ export function Topbar({
                     }}
                     className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 text-left"
                   >
-                    <div className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-medium text-xs shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center font-medium text-xs shrink-0">
                       {(r.name ?? r.phone).slice(0, 1).toUpperCase()}
                     </div>
                     <span className="flex-1 min-w-0 truncate text-sm">{r.name ?? r.phone}</span>
@@ -103,7 +103,7 @@ export function Topbar({
               </div>
             )}
           </div>
-          <span className="text-sm text-indigo-600 font-medium hidden sm:inline">
+          <span className="text-sm text-primary-600 font-medium hidden sm:inline">
             Hoy, {today()}
           </span>
         </div>
@@ -121,7 +121,7 @@ export function Topbar({
         <NotificationBell />
         <Link
           href="/profile"
-          className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold"
+          className="w-9 h-9 rounded-full bg-primary-600 flex items-center justify-center text-white text-xs font-semibold"
           title={userEmail ?? undefined}
         >
           {(userEmail ?? "U").slice(0, 1).toUpperCase()}

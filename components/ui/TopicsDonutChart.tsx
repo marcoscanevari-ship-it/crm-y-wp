@@ -2,7 +2,7 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#4f46e5", "#22c55e", "#f59e0b", "#ef4444", "#06b6d4", "#8b5cf6"];
+const COLORS = ["#072e21", "#4c9b76", "#f59e0b", "#ef4444", "#06b6d4", "#8b5cf6"];
 
 export function TopicsDonutChart({
   data,
