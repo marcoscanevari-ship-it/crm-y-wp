@@ -68,3 +68,53 @@ body {
   background: radial-gradient(circle at 60% 40%, #818cf8, #1e1b4b 70%);
   opacity: 0.35;
 }
+
+/*
+ * Dark mode: toggle funcional en superficies clave (sidebar, topbar, cards),
+ * no un rediseño pixel a pixel. Se activa agregando la clase .dark al <html>
+ * (ver app/layout.tsx, que lee la cookie "theme") y sobreescribe las clases
+ * utilitarias de Tailwind ya usadas en toda la app (bg-white, text-gray-*, etc.)
+ * en vez de agregar variants dark: en cada componente.
+ */
+.dark body {
+  background: #101114;
+  color: #e5e6ea;
+}
+
+.dark .bg-blobs {
+  background: linear-gradient(135deg, #16171d 0%, #101114 40%, #101114 100%);
+}
+
+.dark .bg-white {
+  background-color: #1c1d24;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: #24252c;
+}
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover {
+  background-color: #2a2b33;
+}
+
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-gray-700 {
+  color: #e5e6ea;
+}
+
+.dark .text-gray-500,
+.dark .text-gray-400 {
+  color: #9497a3;
+}
+
+.dark .border-gray-100,
+.dark .border-gray-200 {
+  border-color: #2e2f38;
+}
+
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #2e2f38;
+}

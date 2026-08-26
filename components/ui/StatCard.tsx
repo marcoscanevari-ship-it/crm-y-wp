@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export function StatCard({
   label,
@@ -7,6 +8,7 @@ export function StatCard({
   deltaPositive = true,
   hint,
   highlight = false,
+  href,
 }: {
   label: string;
   value: string | number;
@@ -14,13 +16,14 @@ export function StatCard({
   deltaPositive?: boolean;
   hint?: string;
   highlight?: boolean;
+  href?: string;
 }) {
-  return (
-    <div
-      className={`rounded-2xl p-5 shadow-sm ${
-        highlight ? "bg-indigo-600 text-white" : "bg-white text-gray-900"
-      }`}
-    >
+  const className = `block rounded-2xl p-5 shadow-sm transition ${
+    highlight ? "bg-indigo-600 text-white" : "bg-white text-gray-900"
+  } ${href ? "hover:shadow-md cursor-pointer" : ""}`;
+
+  const content = (
+    <>
       <div className="flex items-center justify-between mb-3">
         <span className={`text-sm ${highlight ? "text-indigo-100" : "text-gray-500"}`}>
           {label}
@@ -53,6 +56,16 @@ export function StatCard({
           {hint}
         </p>
       )}
-    </div>
+    </>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    );
+  }
+
+  return <div className={className}>{content}</div>;
 }

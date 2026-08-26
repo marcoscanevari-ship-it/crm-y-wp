@@ -8,9 +8,9 @@ export const dynamic = "force-dynamic";
 export default async function ConversationsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; score?: string }>;
 }) {
-  const { q } = await searchParams;
+  const { q, score } = await searchParams;
   const supabase = await createServerSupabaseClient();
 
   const [{ data: userData }, { data: contacts }, { data: messages }, { data: leads }] =
@@ -68,6 +68,12 @@ export default async function ConversationsPage({
     none: rows.filter((r) => !r.score).length,
   };
 
+  if (score === "hot" || score === "warm" || score === "cold") {
+    rows = rows.filter((r) => r.score === score);
+  } else if (score === "none") {
+    rows = rows.filter((r) => !r.score);
+  }
+
   return (
     <>
       <Topbar
@@ -77,14 +83,39 @@ export default async function ConversationsPage({
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-        <SummaryCard label="Hot" value={counts.hot} tone="bg-red-50 text-red-600" />
-        <SummaryCard label="Warm" value={counts.warm} tone="bg-amber-50 text-amber-600" />
-        <SummaryCard label="Cold" value={counts.cold} tone="bg-blue-50 text-blue-600" />
-        <SummaryCard label="Sin calificar" value={counts.none} tone="bg-gray-100 text-gray-500" />
+        <SummaryCard
+          label="Hot"
+          value={counts.hot}
+          tone="bg-red-50 text-red-600"
+          href={scoreHref("hot", q)}
+          active={score === "hot"}
+        />
+        <SummaryCard
+          label="Warm"
+          value={counts.warm}
+          tone="bg-amber-50 text-amber-600"
+          href={scoreHref("warm", q)}
+          active={score === "warm"}
+        />
+        <SummaryCard
+          label="Cold"
+          value={counts.cold}
+          tone="bg-blue-50 text-blue-600"
+          href={scoreHref("cold", q)}
+          active={score === "cold"}
+        />
+        <SummaryCard
+          label="Sin calificar"
+          value={counts.none}
+          tone="bg-gray-100 text-gray-500"
+          href={scoreHref("none", q)}
+          active={score === "none"}
+        />
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm p-5">
-        <form className="mb-4" method="get">
+        <form className="mb-4 flex items-center gap-2" method="get">
+          {score && <input type="hidden" name="score" value={score} />}
           <input
             type="text"
             name="q"
@@ -92,6 +123,11 @@ export default async function ConversationsPage({
             placeholder="Buscar por nombre o teléfono..."
             className="w-full sm:w-80 rounded-xl border border-gray-200 px-4 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
           />
+          {score && (
+            <Link href="/conversations" className="text-sm text-indigo-600 hover:underline shrink-0">
+              Quitar filtro
+            </Link>
+          )}
         </form>
 
         <div className="divide-y divide-gray-100">
@@ -141,21 +177,37 @@ export default async function ConversationsPage({
   );
 }
 
+function scoreHref(score: string, q?: string) {
+  const params = new URLSearchParams();
+  params.set("score", score);
+  if (q) params.set("q", q);
+  return `/conversations?${params.toString()}`;
+}
+
 function SummaryCard({
   label,
   value,
   tone,
+  href,
+  active,
 }: {
   label: string;
   value: number;
   tone: string;
+  href: string;
+  active: boolean;
 }) {
   return (
-    <div className="rounded-2xl bg-white shadow-sm p-4">
+    <Link
+      href={href}
+      className={`block rounded-2xl bg-white shadow-sm p-4 transition hover:shadow-md ${
+        active ? "ring-2 ring-indigo-500" : ""
+      }`}
+    >
       <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-medium mb-2 ${tone}`}>
         {label}
       </span>
       <p className="text-2xl font-semibold">{value}</p>
-    </div>
+    </Link>
   );
 }

@@ -97,10 +97,10 @@ export default async function DashboardPage() {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <StatCard label="Total contactos" value={allContacts.length} highlight />
-        <StatCard label="Leads hot" value={hotCount} deltaPositive />
-        <StatCard label="Leads warm" value={warmCount} />
-        <StatCard label="Leads cold" value={coldCount} />
+        <StatCard label="Total contactos" value={allContacts.length} highlight href="/clientes" />
+        <StatCard label="Leads hot" value={hotCount} deltaPositive href="/conversations?score=hot" />
+        <StatCard label="Leads warm" value={warmCount} href="/conversations?score=warm" />
+        <StatCard label="Leads cold" value={coldCount} href="/conversations?score=cold" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">

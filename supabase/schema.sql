@@ -89,3 +89,82 @@ create policy "authenticated_all_leads" on leads
 
 create policy "authenticated_all_settings" on settings
   for all to authenticated using (true) with check (true);
+
+-- Profiles: datos del usuario del panel (rol, preferencias, datos personales).
+-- id referencia auth.users, se crea vía backend al primer login o sembrado a mano.
+create table if not exists profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text not null,
+  role text not null default 'operador' check (role in ('admin', 'operador')),
+  phone text,
+  dni text,
+  address text,
+  age int,
+  hobbies text,
+  avatar_url text,
+  theme text not null default 'light' check (theme in ('light', 'dark')),
+  language text not null default 'es' check (language in ('es', 'en')),
+  password_set boolean not null default false,
+  created_at timestamptz default now()
+);
+
+alter table profiles enable row level security;
+
+-- Cada usuario puede ver y actualizar su propia fila.
+create policy "profiles_select_own" on profiles
+  for select to authenticated using (auth.uid() = id);
+
+create policy "profiles_update_own" on profiles
+  for update to authenticated using (auth.uid() = id) with check (auth.uid() = id);
+
+-- Los admin pueden ver y actualizar cualquier fila (para la matriz de roles).
+create policy "profiles_select_admin" on profiles
+  for select to authenticated using (
+    exists (select 1 from profiles p where p.id = auth.uid() and p.role = 'admin')
+  );
+
+create policy "profiles_update_admin" on profiles
+  for update to authenticated using (
+    exists (select 1 from profiles p where p.id = auth.uid() and p.role = 'admin')
+  );
+
+-- Notificaciones globales del equipo (nuevo contacto, cambio de score de un lead).
+create table if not exists notifications (
+  id uuid primary key default gen_random_uuid(),
+  type text not null check (type in ('new_contact', 'score_change')),
+  contact_id uuid references contacts(id) on delete cascade,
+  message text not null,
+  read boolean not null default false,
+  created_at timestamptz default now()
+);
+
+create index if not exists idx_notifications_created on notifications(created_at desc);
+
+alter table notifications enable row level security;
+
+create policy "authenticated_all_notifications" on notifications
+  for all to authenticated using (true) with check (true);
+
+-- Bucket público para fotos de perfil. Cada usuario sube a su propia carpeta
+-- (`{user_id}/avatar.jpg`), validado por policy contra auth.uid().
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
+
+create policy "avatar_public_read" on storage.objects
+  for select to public using (bucket_id = 'avatars');
+
+create policy "avatar_upload_own" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "avatar_update_own" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- Nota: correr todo este bloque nuevo (profiles + notifications + storage) en el
+-- SQL Editor de Supabase antes del deploy. Las filas admin (mcanevari@zokkia.com,
+-- jmgil@zokkia.com, agil@zokkia.com) NO se siembran a mano: /api/auth/callback
+-- provisiona el perfil de cada usuario en su primer login y decide el rol
+-- server-side comparando contra ADMIN_EMAILS (lib/auth.ts) con el cliente admin
+-- (service_role), sin exponer esa lógica al cliente.

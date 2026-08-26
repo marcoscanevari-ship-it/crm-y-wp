@@ -151,6 +151,12 @@ async function upsertContact(
     throw new Error(`No se pudo crear el contacto: ${error?.message}`);
   }
 
+  await supabase.from("notifications").insert({
+    type: "new_contact",
+    contact_id: created.id,
+    message: `Nuevo contacto: ${created.name ?? created.phone}`,
+  });
+
   return created;
 }
 
@@ -174,6 +180,14 @@ async function qualifyInBackground(
   }));
 
   try {
+    const { data: previousLead } = await supabase
+      .from("leads")
+      .select("score")
+      .eq("contact_id", contactId)
+      .order("qualified_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
     const qualification = await classifyLead(chatHistory);
 
     const { data: lead } = await supabase
@@ -186,6 +200,33 @@ async function qualifyInBackground(
       })
       .select()
       .single();
+
+    if (previousLead && previousLead.score !== qualification.score) {
+      await supabase.from("notifications").insert({
+        type: "score_change",
+        contact_id: contactId,
+        message: `${contactName ?? phone} pasó a ${qualification.score}`,
+      });
+    }
+
+    if (qualification.email || qualification.company) {
+      const { data: existingContact } = await supabase
+        .from("contacts")
+        .select("email, company")
+        .eq("id", contactId)
+        .single();
+
+      const updates: Record<string, string> = {};
+      if (qualification.email && !existingContact?.email) {
+        updates.email = qualification.email;
+      }
+      if (qualification.company && !existingContact?.company) {
+        updates.company = qualification.company;
+      }
+      if (Object.keys(updates).length) {
+        await supabase.from("contacts").update(updates).eq("id", contactId);
+      }
+    }
 
     if (qualification.score === "hot" && lead) {
       await sendHotLeadAlert({ contactName, phone, reason: qualification.reason });

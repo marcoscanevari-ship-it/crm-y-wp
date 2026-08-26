@@ -7,6 +7,8 @@ export interface LeadQualification {
   score: "hot" | "warm" | "cold";
   reason: string;
   topic: string;
+  email: string | null;
+  company: string | null;
 }
 
 const QUALIFY_SYSTEM_PROMPT = `Sos un clasificador de leads para una agencia. Analizá la conversación de WhatsApp y clasificá al contacto:
@@ -14,8 +16,10 @@ const QUALIFY_SYSTEM_PROMPT = `Sos un clasificador de leads para una agencia. An
 - WARM: mostró interés pero no llegó a querer agendar ni pidió precio.
 - COLD: sin interés real, spam, busca empleo, o solo curiosidad.
 
+Además, si el usuario mencionó su email o el nombre de su empresa en algún momento de la charla, extraelos. Si no los mencionó, no los inventes.
+
 Respondé ÚNICAMENTE con un JSON válido, sin texto adicional, con este formato exacto:
-{"score": "hot" | "warm" | "cold", "reason": "explicación breve en español", "topic": "tema principal de la conversación en 2-3 palabras"}`;
+{"score": "hot" | "warm" | "cold", "reason": "explicación breve en español", "topic": "tema principal de la conversación en 2-3 palabras", "email": "email mencionado o null", "company": "empresa mencionada o null"}`;
 
 /**
  * Clasifica una conversación en hot/warm/cold usando GPT-5 Nano vía OpenRouter.
@@ -68,5 +72,7 @@ export async function classifyLead(history: ChatMessage[]): Promise<LeadQualific
     score: parsed.score,
     reason: String(parsed.reason ?? "Sin razón especificada"),
     topic: String(parsed.topic ?? "General"),
+    email: typeof parsed.email === "string" && parsed.email.trim() ? parsed.email.trim() : null,
+    company: typeof parsed.company === "string" && parsed.company.trim() ? parsed.company.trim() : null,
   };
 }

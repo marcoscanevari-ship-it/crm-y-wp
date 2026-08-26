@@ -14,15 +14,16 @@ import {
 import { signOutAction } from "@/app/(app)/actions";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/conversations", icon: MessageSquare, label: "Conversaciones" },
-  { href: "/clientes", icon: Users, label: "Base de clientes" },
-  { href: "/settings", icon: Settings, label: "Configuración" },
-  { href: "/test-chat", icon: FlaskConical, label: "Test chat" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", adminOnly: false },
+  { href: "/conversations", icon: MessageSquare, label: "Conversaciones", adminOnly: false },
+  { href: "/clientes", icon: Users, label: "Base de clientes", adminOnly: false },
+  { href: "/settings", icon: Settings, label: "Configuración", adminOnly: true },
+  { href: "/test-chat", icon: FlaskConical, label: "Test chat", adminOnly: true },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
+  const items = NAV_ITEMS.filter((item) => !item.adminOnly || isAdmin);
 
   return (
     <aside className="flex flex-col items-center justify-between w-[72px] shrink-0 py-5 bg-white rounded-3xl shadow-sm h-[calc(100vh-2.5rem)] sticky top-5">
@@ -32,7 +33,7 @@ export function Sidebar() {
         </div>
 
         <nav className="flex flex-col items-center gap-2 w-full">
-          {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
+          {items.map(({ href, icon: Icon, label }) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
               <Link
