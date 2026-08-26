@@ -11,7 +11,7 @@ import {
 import { useSearchParams } from "next/navigation";
 
 const initialMagicState: RequestMagicLinkResult = { ok: false, message: "" };
-const initialPasswordState: SignInWithPasswordResult = { ok: false, message: "", mfaPending: false };
+const initialPasswordState: SignInWithPasswordResult = { ok: false, message: "" };
 
 export default function LoginPage() {
   return (
@@ -22,7 +22,7 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const [mode, setMode] = useState<"password" | "magic">("password");
+  const [mode, setMode] = useState<"password" | "recover">("password");
 
   const [passwordState, passwordAction, passwordPending] = useActionState(
     async (_prev: SignInWithPasswordResult, formData: FormData) => signInWithPasswordAction(formData),
@@ -51,12 +51,7 @@ function LoginForm() {
           </div>
         )}
 
-        {passwordState.mfaPending ? (
-          <div>
-            <h1 className="text-xl font-semibold mb-1">Revisá tu email</h1>
-            <p className="text-sm text-gray-500">{passwordState.message}</p>
-          </div>
-        ) : mode === "password" ? (
+        {mode === "password" ? (
           <>
             <h1 className="text-xl font-semibold mb-1">Ingresá a tu panel</h1>
             <p className="text-sm text-gray-500 mb-6">Ingresá con tu email y contraseña de @zokkia.com.</p>
@@ -91,17 +86,17 @@ function LoginForm() {
 
             <button
               type="button"
-              onClick={() => setMode("magic")}
+              onClick={() => setMode("recover")}
               className="mt-4 text-sm text-primary-600 hover:underline"
             >
-              ¿Primera vez o olvidaste tu contraseña? Enviate un link mágico
+              ¿Olvidaste tu contraseña?
             </button>
           </>
         ) : (
           <>
-            <h1 className="text-xl font-semibold mb-1">Link mágico</h1>
+            <h1 className="text-xl font-semibold mb-1">Recuperar contraseña</h1>
             <p className="text-sm text-gray-500 mb-6">
-              Te enviamos un link a tu email de @zokkia.com para ingresar y definir tu contraseña.
+              Te enviamos un link a tu email de @zokkia.com para definir una nueva contraseña.
             </p>
 
             <form action={magicAction} className="space-y-3">
@@ -117,7 +112,7 @@ function LoginForm() {
                 disabled={magicPending}
                 className="w-full rounded-xl bg-primary-600 text-white text-sm font-medium py-2.5 hover:bg-primary-700 transition disabled:opacity-60"
               >
-                {magicPending ? "Enviando..." : "Enviar link mágico"}
+                {magicPending ? "Enviando..." : "Enviar link"}
               </button>
             </form>
 

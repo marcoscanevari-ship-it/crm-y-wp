@@ -1,6 +1,9 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getProfile, isAdmin } from "@/lib/profile";
+import { isEmailAllowed } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
@@ -130,4 +133,84 @@ export async function uploadAvatarAction(formData: FormData): Promise<ActionResu
 function nullableString(value: FormDataEntryValue | null): string | null {
   const str = String(value ?? "").trim();
   return str ? str : null;
+}
+
+/**
+ * Alta de colaborador por un admin: crea el usuario en Supabase Auth con la
+ * contraseña que define el admin (se la comparte aparte, no se manda mail).
+ */
+export async function createUserAction(formData: FormData): Promise<ActionResult> {
+  const profile = await getProfile();
+  if (!isAdmin(profile)) {
+    return { ok: false, message: "No autorizado." };
+  }
+
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  const role = String(formData.get("role") ?? "operador");
+
+  if (!isEmailAllowed(email)) {
+    return { ok: false, message: "Solo se permiten emails @zokkia.com." };
+  }
+  if (password.length < 8) {
+    return { ok: false, message: "La contraseña tiene que tener al menos 8 caracteres." };
+  }
+  if (role !== "admin" && role !== "operador") {
+    return { ok: false, message: "Rol inválido." };
+  }
+
+  const admin = createAdminClient();
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+
+  if (error || !data.user) {
+    const alreadyExists = error?.message?.toLowerCase().includes("already");
+    return { ok: false, message: alreadyExists ? "Ese usuario ya existe." : "No se pudo crear el usuario." };
+  }
+
+  const { error: profileError } = await admin
+    .from("profiles")
+    .insert({ id: data.user.id, email, role, password_set: true });
+
+  if (profileError) {
+    return { ok: false, message: "El usuario se creó pero no se pudo guardar el perfil." };
+  }
+
+  revalidatePath("/profile");
+  return { ok: true, message: "Usuario creado. Compartile el email y la contraseña por otro medio." };
+}
+
+/**
+ * Blanqueo de contraseña por un admin. No manda mail: el admin le pasa la
+ * contraseña nueva al colaborador directamente.
+ */
+export async function resetUserPasswordAction(formData: FormData): Promise<ActionResult> {
+  const profile = await getProfile();
+  if (!isAdmin(profile)) {
+    return { ok: false, message: "No autorizado." };
+  }
+
+  const userId = String(formData.get("userId") ?? "");
+  const password = String(formData.get("password") ?? "");
+
+  if (!userId) {
+    return { ok: false, message: "Usuario inválido." };
+  }
+  if (password.length < 8) {
+    return { ok: false, message: "La contraseña tiene que tener al menos 8 caracteres." };
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.updateUserById(userId, { password });
+  if (error) {
+    return { ok: false, message: "No se pudo blanquear la contraseña." };
+  }
+
+  await admin.from("profiles").update({ password_set: true }).eq("id", userId);
+
+  revalidatePath("/profile");
+  return { ok: true, message: "Contraseña blanqueada." };
 }

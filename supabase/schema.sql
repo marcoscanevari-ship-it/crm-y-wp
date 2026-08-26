@@ -118,15 +118,25 @@ create policy "profiles_update_own" on profiles
   for update to authenticated using (auth.uid() = id) with check (auth.uid() = id);
 
 -- Los admin pueden ver y actualizar cualquier fila (para la matriz de roles).
-create policy "profiles_select_admin" on profiles
-  for select to authenticated using (
-    exists (select 1 from profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+-- Usa una función security definer para evitar recursión infinita: una policy
+-- de "profiles" no puede hacer un subquery directo contra "profiles".
+create or replace function is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (select 1 from profiles where id = auth.uid() and role = 'admin');
+$$;
 
+drop policy if exists "profiles_select_admin" on profiles;
+create policy "profiles_select_admin" on profiles
+  for select to authenticated using (is_admin());
+
+drop policy if exists "profiles_update_admin" on profiles;
 create policy "profiles_update_admin" on profiles
-  for update to authenticated using (
-    exists (select 1 from profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+  for update to authenticated using (is_admin());
 
 -- Notificaciones globales del equipo (nuevo contacto, cambio de score de un lead).
 create table if not exists notifications (

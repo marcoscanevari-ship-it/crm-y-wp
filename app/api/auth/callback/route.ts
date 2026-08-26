@@ -6,6 +6,7 @@ import { isEmailAllowed, ADMIN_EMAILS } from "@/lib/auth";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const isPasswordReset = searchParams.get("reset") === "1";
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login?error=sin-codigo`);
@@ -42,11 +43,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/login/set-password`);
   }
 
-  if (!existingProfile.password_set) {
+  if (isPasswordReset || !existingProfile.password_set) {
     return NextResponse.redirect(`${origin}/login/set-password`);
   }
 
-  const response = NextResponse.redirect(`${origin}/dashboard`);
-  response.cookies.delete("mfa_pending_email");
-  return response;
+  return NextResponse.redirect(`${origin}/dashboard`);
 }
