@@ -12,21 +12,31 @@ export default async function ClientesPage({
   const { q } = await searchParams;
   const supabase = await createServerSupabaseClient();
 
-  const [{ data: userData }, { data: contacts }] = await Promise.all([
+  const [{ data: userData }, { data: contacts }, { data: leads }] = await Promise.all([
     supabase.auth.getUser(),
     supabase
       .from("contacts")
-      .select("id, phone, name, email, company, created_at")
+      .select("id, phone, name, last_name, email, company, notes, created_at")
       .order("created_at", { ascending: false }),
+    supabase
+      .from("leads")
+      .select("contact_id, score")
+      .order("qualified_at", { ascending: false }),
   ]);
 
-  let rows = contacts ?? [];
+  const stageByContact = new Map<string, "hot" | "warm" | "cold">();
+  for (const l of leads ?? []) {
+    if (!stageByContact.has(l.contact_id)) stageByContact.set(l.contact_id, l.score);
+  }
+
+  let rows = (contacts ?? []).map((c) => ({ ...c, stage: stageByContact.get(c.id) ?? null }));
   if (q) {
     const query = q.toLowerCase();
     rows = rows.filter(
       (r) =>
         r.phone.toLowerCase().includes(query) ||
         (r.name ?? "").toLowerCase().includes(query) ||
+        (r.last_name ?? "").toLowerCase().includes(query) ||
         (r.company ?? "").toLowerCase().includes(query) ||
         (r.email ?? "").toLowerCase().includes(query)
     );

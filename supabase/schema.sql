@@ -20,6 +20,8 @@ create table if not exists contacts (
 -- Migración: agrega email/company si la tabla ya existía de antes.
 alter table contacts add column if not exists email text;
 alter table contacts add column if not exists company text;
+alter table contacts add column if not exists last_name text;
+alter table contacts add column if not exists notes text;
 
 -- Messages
 create table if not exists messages (
